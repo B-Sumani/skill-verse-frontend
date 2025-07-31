@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+# Skill Verse Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend for the Skill Verse platform, built with Material-UI and modern React practices.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **Authentication System**: Complete signup/signin with JWT tokens
+- **Modern UI**: Material-UI components with responsive design
+- **Form Validation**: Yup schema validation with Formik
+- **Protected Routes**: Authentication-based route protection
+- **API Integration**: Axios-based API service layer
 
-### `npm start`
+## 📦 Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **Set up environment variables:**
+   Create a `.env` file in the frontend directory:
+   ```env
+   REACT_APP_API_URL=http://localhost:5000/api
+   ```
 
-### `npm test`
+3. **Start the development server:**
+   ```bash
+   npm start
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🏗️ Project Structure
 
-### `npm run build`
+```
+frontend/
+├── src/
+│   ├── api/
+│   │   └── api.js              # API service layer
+│   ├── components/
+│   │   ├── Auth/
+│   │   │   ├── LoginForm.jsx   # Signin form
+│   │   │   └── SignupForm.jsx  # Signup form
+│   │   └── ...                 # Other components
+│   ├── contexts/
+│   │   └── AuthContext.jsx     # Authentication context
+│   ├── App.jsx                 # Main app component
+│   └── index.js                # Entry point
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🔐 Authentication
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Signup Form Fields:
+- ✅ **Name** - Full name
+- ✅ **Email** - Valid email address
+- ✅ **Password** - Minimum 6 characters
+- ✅ **Confirm Password** - Must match password
+- ✅ **Skill to Teach** - Dropdown selection
+- ✅ **Skill to Learn** - Dropdown selection
+- ✅ **LinkedIn** - Optional LinkedIn profile URL
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Signin Form Fields:
+- ✅ **Email** - User's email address
+- ✅ **Password** - User's password
 
-### `npm run eject`
+## 🎨 UI Components
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Material-UI**: Modern, responsive design system
+- **Form Validation**: Real-time validation with error messages
+- **Loading States**: Proper loading indicators
+- **Error Handling**: User-friendly error messages
+- **Responsive Design**: Works on all device sizes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🔧 Development
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Available Scripts:
+- `npm start` - Start development server
+- `npm build` - Build for production
+- `npm test` - Run tests
+- `npm eject` - Eject from Create React App
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Key Dependencies:
+- **React 19** - Latest React version
+- **Material-UI 7** - UI component library
+- **React Router 7** - Client-side routing
+- **Axios** - HTTP client for API calls
+- **Formik + Yup** - Form handling and validation
 
-## Learn More
+## 🌐 API Integration
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The frontend connects to the backend API at `http://localhost:5000/api` with the following endpoints:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Authentication**: `/auth/signup`, `/auth/signin`, `/auth/me`
+- **Algorand**: `/algorand/*` - Blockchain operations
+- **Users**: `/users/*` - User management
+- **Sessions**: `/sessions/*` - Learning sessions
+- **Messages**: `/messages/*` - Messaging system
+- **Feedback**: `/feedback/*` - User feedback
+- **Credentials**: `/credentials/*` - Digital credentials
 
-### Code Splitting
+## 🔒 Security Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **JWT Token Management**: Automatic token storage and refresh
+- **Protected Routes**: Authentication-based access control
+- **Form Validation**: Client-side and server-side validation
+- **Error Handling**: Secure error messages
+- **Token Interception**: Automatic token injection in API calls
 
-### Analyzing the Bundle Size
+## 🚀 Getting Started
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Clone the repository**
+2. **Install dependencies**: `npm install`
+3. **Create .env file**: Copy from .env.example
+4. **Start backend**: `cd ../backend && npm run dev`
+5. **Start frontend**: `npm start`
+6. **Open browser**: Navigate to `http://localhost:3000`
 
-### Making a Progressive Web App
+## 📱 Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. **Sign Up**: Create a new account with your skills
+2. **Sign In**: Log in with your credentials
+3. **Dashboard**: Access your personalized dashboard
+4. **Profile**: Manage your profile and preferences
 
-### Advanced Configuration
+## 🤝 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-### Deployment
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.
