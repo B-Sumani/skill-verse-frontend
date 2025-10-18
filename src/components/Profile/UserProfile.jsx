@@ -274,7 +274,7 @@ const UserProfile = () => {
   };
 
   const renderProfileHeader = () => (
-    <Card sx={{ mb: 3 }}>
+    <Card hover gradient sx={{ mb: 3 }}>
       <CardContent>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center" gap={3}>
@@ -432,125 +432,137 @@ const UserProfile = () => {
   const renderSkillsSection = () => (
     <Grid container spacing={3} sx={{ mb: 3 }}>
       <Grid size={{ xs: 12, md: 6 }}>
-        <Paper sx={{ p: 3, height: '100%' }}>
-          <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
-            <SchoolIcon color="primary" />
-            Skills I Can Teach
-          </Typography>
-          <Box sx={{ mt: 2 }}>
-            {profile?.profile?.skills?.length > 0 ? (
-              profile.profile.skills.map((skill, index) => (
-                <Chip
-                  key={index}
-                  label={skill}
-                  color="primary"
-                  variant="outlined"
-                  sx={{ m: 0.5 }}
-                />
-              ))
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                No skills listed yet
-              </Typography>
-            )}
-          </Box>
-        </Paper>
+        <Card hover sx={{ height: '100%' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1} sx={{ fontWeight: 700 }}>
+              <SchoolIcon color="primary" />
+              Skills I Can Teach
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              {profile?.profile?.skills?.length > 0 ? (
+                profile.profile.skills.map((skill, index) => (
+                  <Chip
+                    key={index}
+                    label={skill}
+                    color="primary"
+                    variant="outlined"
+                    sx={{ m: 0.5, fontWeight: 500 }}
+                  />
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No skills listed yet
+                </Typography>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
       </Grid>
 
       <Grid size={{ xs: 12, md: 6 }}>
-        <Paper sx={{ p: 3, height: '100%' }}>
-          <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1}>
-            <WorkIcon color="secondary" />
-            Skills I Want to Learn
-          </Typography>
-          <Box sx={{ mt: 2 }}>
-            {profile?.profile?.interests?.length > 0 ? (
-              profile.profile.interests.map((interest, index) => (
-                <Chip
-                  key={index}
-                  label={interest}
-                  color="secondary"
-                  variant="outlined"
-                  sx={{ m: 0.5 }}
-                />
-              ))
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                No learning interests listed yet
-              </Typography>
-            )}
-          </Box>
-        </Paper>
+        <Card hover sx={{ height: '100%' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom display="flex" alignItems="center" gap={1} sx={{ fontWeight: 700 }}>
+              <WorkIcon color="secondary" />
+              Skills I Want to Learn
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              {profile?.profile?.interests?.length > 0 ? (
+                profile.profile.interests.map((interest, index) => (
+                  <Chip
+                    key={index}
+                    label={interest}
+                    color="secondary"
+                    variant="outlined"
+                    sx={{ m: 0.5, fontWeight: 500 }}
+                  />
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No learning interests listed yet
+                </Typography>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
 
   const renderContactInfo = () => (
-    <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Contact Information
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <Typography variant="body2" color="text.secondary">
-            Email
-          </Typography>
-          <Typography variant="body1">
-            {profile?.email}
-          </Typography>
-        </Grid>
-        {profile?.profile?.linkedin && (
+    <Card hover sx={{ mb: 3 }}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
+          Contact Information
+        </Typography>
+        <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography variant="body2" color="text.secondary">
-              LinkedIn
+            <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+              Email
             </Typography>
-            <Button
-              startIcon={<LinkedInIcon />}
-              href={profile.profile.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ textTransform: 'none' }}
-            >
-              View Profile
-            </Button>
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              {profile?.email}
+            </Typography>
           </Grid>
-        )}
-      </Grid>
-    </Paper>
+          {profile?.profile?.linkedin && (
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+                LinkedIn
+              </Typography>
+              <Button
+                startIcon={<LinkedInIcon />}
+                href={profile.profile.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ textTransform: 'none', fontWeight: 500 }}
+              >
+                View Profile
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </CardContent>
+    </Card>
   );
 
   const renderBlockchainInfo = () => (
     profile?.algorandAddress && (
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Blockchain Wallet
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Algorand Address
-        </Typography>
-        <Typography 
-          variant="body1" 
-          sx={{ 
-            fontFamily: 'monospace', 
-            wordBreak: 'break-all',
-            background: '#f5f5f5',
-            p: 1,
-            borderRadius: 1,
-          }}
-        >
-          {profile.algorandAddress}
-        </Typography>
-      </Paper>
+      <Card hover sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
+            Blockchain Wallet
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500, mb: 1 }}>
+            Algorand Address
+          </Typography>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              fontFamily: 'monospace', 
+              wordBreak: 'break-all',
+              background: '#f1f5f9',
+              p: 2,
+              borderRadius: 2,
+              border: '1px solid #e2e8f0',
+              fontWeight: 500,
+            }}
+          >
+            {profile.algorandAddress}
+          </Typography>
+        </CardContent>
+      </Card>
     )
   );
 
   const renderCredentials = () => (
-    <Paper sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Digital Credentials (NFTs)
-      </Typography>
-      <CredentialList userId={profile?.id} />
-    </Paper>
+    <Card hover>
+      <CardContent>
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
+          Digital Credentials (NFTs)
+        </Typography>
+        <CredentialList userId={profile?.id} />
+      </CardContent>
+    </Card>
   );
 
   if (loading) {
