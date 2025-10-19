@@ -17,6 +17,7 @@ import {
   Container,
 } from '@mui/material';
 import { useAuth } from '../../contexts/AuthContext';
+import { useWallet } from '../../contexts/WalletContext';
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -89,6 +90,7 @@ const skillsList = [
 const SignupForm = () => {
   const navigate = useNavigate();
   const { signup, error, clearError } = useAuth();
+  const { showWalletConnection } = useWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formik = useFormik({
@@ -119,6 +121,12 @@ const SignupForm = () => {
         };
         
         await signup(signupData);
+        
+        // Show wallet connection dialog after successful signup
+        setTimeout(() => {
+          showWalletConnection();
+        }, 1000);
+        
         navigate('/dashboard');
       } catch (error) {
         console.error('Signup error:', error);

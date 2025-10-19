@@ -38,14 +38,24 @@ api.interceptors.response.use(
       status: error.response?.status,
       statusText: error.response?.statusText,
       data: error.response?.data,
-      message: error.message
+      message: error.message,
+      headers: error.config?.headers
     });
     
+    // Handle different error status codes
     if (error.response?.status === 401) {
+      console.log('Unauthorized - clearing auth data');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('walletAddress');
       window.location.href = '/login';
+    } else if (error.response?.status === 403) {
+      console.log('Forbidden - token may be invalid or expired');
+      // Don't auto-redirect on 403, let the component handle it
+    } else if (error.response?.status >= 500) {
+      console.log('Server error - backend may be down');
     }
+    
     return Promise.reject(error);
   }
 );

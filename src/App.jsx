@@ -45,9 +45,12 @@ import {
   Schedule as ScheduleIcon,
   EmojiEvents as EmojiEventsIcon,
   AdminPanelSettings as AdminPanelSettingsIcon,
+  AccountBalanceWallet as WalletIcon,
 } from '@mui/icons-material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { WalletProvider, useWallet } from './contexts/WalletContext';
 import theme from './styles/theme';
+import './utils/debug'; // Import debug utilities
 import SignupForm from './components/Auth/SignupForm';
 import LoginForm from './components/Auth/LoginForm';
 import LandingPage from './components/LandingPage';
@@ -59,6 +62,8 @@ import MessageDebug from './components/Messaging/MessageDebug';
 import VideoCall from './components/VideoSession/VideoCall';
 import CredentialList from './components/Credentials/CredentialList';
 import AdminDashboard from './components/Admin/AdminDashboard';
+import WalletConnection from './components/Wallet/WalletConnection';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -74,6 +79,7 @@ const ProtectedRoute = ({ children }) => {
 // Navigation Component
 const Navigation = ({ drawerOpen, setDrawerOpen }) => {
   const { user, logout } = useAuth();
+  const { showWalletConnection, hideWalletConnection, handleWalletConnect, handleWalletSkip, isConnected, walletAddress, showWalletDialog } = useWallet();
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -189,6 +195,26 @@ const Navigation = ({ drawerOpen, setDrawerOpen }) => {
                 </Badge>
               </IconButton>
             </Tooltip>
+
+            {/* Wallet Connection Button */}
+            <Tooltip title={isConnected ? `Wallet: ${walletAddress?.slice(0, 6)}...` : "Connect Wallet"}>
+              <Button
+                variant={isConnected ? "contained" : "outlined"}
+                size="small"
+                onClick={showWalletConnection}
+                startIcon={<WalletIcon />}
+                sx={{
+                  color: isConnected ? 'white' : 'inherit',
+                  borderColor: isConnected ? 'transparent' : 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: isConnected ? 'success.main' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: isConnected ? 'success.dark' : 'rgba(255, 255, 255, 0.1)',
+                  },
+                }}
+              >
+                {isConnected ? 'Connected' : 'Connect Wallet'}
+              </Button>
+            </Tooltip>
             
             <Tooltip title="Profile">
               <IconButton
@@ -288,6 +314,14 @@ const Navigation = ({ drawerOpen, setDrawerOpen }) => {
           } />
         </Routes>
       </Box>
+
+      {/* Wallet Connection Dialog */}
+      <WalletConnection
+        open={showWalletDialog}
+        onClose={hideWalletConnection}
+        onConnect={handleWalletConnect}
+        onSkip={handleWalletSkip}
+      />
     </Box>
   );
 };
@@ -547,26 +581,30 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/signup" element={<SignupForm />} />
-            <Route path="/login" element={<LoginForm />} />
-            <Route 
-              path="/*" 
-              element={
-                <ProtectedRoute>
-                  <Navigation drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <WalletProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/signup" element={<SignupForm />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route 
+                  path="/*" 
+                  element={
+                    <ProtectedRoute>
+                      <Navigation drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+                    </ProtectedRoute>
+                  } 
+                />
+              </Routes>
+            </Router>
+          </WalletProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

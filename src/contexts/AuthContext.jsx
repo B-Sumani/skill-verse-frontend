@@ -20,22 +20,48 @@ export const AuthProvider = ({ children }) => {
   // Check if user is authenticated on app load
   useEffect(() => {
     const checkAuth = async () => {
-      if (token) {
+      if (token && !user) {
         try {
-          const response = await authAPI.getCurrentUser();
-          setUser(response.data.user);
+          const me = await authAPI.getCurrentUser();
+          // Handle backend response structure: { success, message, data: { user } } or { user }
+          const user = me.data?.user || me.user;
+          if (user) {
+            setUser(user);
+          }
         } catch (error) {
           console.error('Auth check failed:', error);
           
-          // Clear all auth data
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setToken(null);
-          setUser(null);
-          
-          // Redirect to login page
-          if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
-            window.location.href = '/login';
+          // Handle different error types
+          if (error.response?.status === 403) {
+            console.log('Token is invalid or expired - clearing auth data');
+            // Clear all auth data for 403 errors
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('walletAddress');
+            setToken(null);
+            setUser(null);
+            
+            // Redirect to login page
+            if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
+              window.location.href = '/login';
+            }
+          } else if (error.response?.status === 401) {
+            console.log('Unauthorized - clearing auth data');
+            // Clear all auth data for 401 errors
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('walletAddress');
+            setToken(null);
+            setUser(null);
+            
+            // Redirect to login page
+            if (window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/') {
+              window.location.href = '/login';
+            }
+          } else {
+            console.log('Network or server error - keeping user logged in for now');
+            // For network errors, don't clear auth data immediately
+            // The user might just have a temporary connection issue
           }
         }
       }
@@ -43,7 +69,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuth();
-  }, [token]);
+  }, [token, user]);
 
   // Signup function
   const signup = async (userData) => {
@@ -53,17 +79,25 @@ export const AuthProvider = ({ children }) => {
       
       // Try the actual API first
       try {
-        const response = await authAPI.signup(userData);
-        console.log('Signup response:', response);
+        const result = await authAPI.signup(userData);
+        console.log('Signup response:', result);
+        
+        // Handle backend response structure: { success, message, data: { token, user } }
+        const token = result.data?.token || result.token;
+        const user = result.data?.user || result.user;
+        
+        if (!token || !user) {
+          throw new Error('Invalid response: missing token or user');
+        }
         
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         
-        setToken(response.data.token);
-        setUser(response.data.user);
+        setToken(token);
+        setUser(user);
         
-        return response;
+        return { token, user };
       } catch (apiError) {
         console.error('API signup failed:', apiError);
         
@@ -102,7 +136,7 @@ export const AuthProvider = ({ children }) => {
           setToken(mockToken);
           setUser(mockUser);
           
-          return { data: { user: mockUser, token: mockToken } };
+          return { user: mockUser, token: mockToken };
         }
         
         // If not in development or API error is specific, throw the error
@@ -131,17 +165,25 @@ export const AuthProvider = ({ children }) => {
       
       // Try the actual API first
       try {
-        const response = await authAPI.signin(credentials);
-        console.log('Signin response:', response);
+        const result = await authAPI.signin(credentials);
+        console.log('Signin response:', result);
+        
+        // Handle backend response structure: { success, message, data: { token, user } }
+        const token = result.data?.token || result.token;
+        const user = result.data?.user || result.user;
+        
+        if (!token || !user) {
+          throw new Error('Invalid response: missing token or user');
+        }
         
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         
-        setToken(response.data.token);
-        setUser(response.data.user);
+        setToken(token);
+        setUser(user);
         
-        return response;
+        return { token, user };
       } catch (apiError) {
         console.error('API signin failed:', apiError);
         
@@ -181,7 +223,7 @@ export const AuthProvider = ({ children }) => {
             setToken(mockToken);
             setUser(mockUser);
             
-            return { data: { user: mockUser, token: mockToken } };
+            return { user: mockUser, token: mockToken };
           }
         }
         
